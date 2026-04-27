@@ -89,7 +89,7 @@ export async function sendTesterKitEmail(params: {
   await resend.emails.send({
     from: 'Hive Testing Station <hive@hive.baby>',
     to: params.to,
-    subject: `You're Founding Tester #${params.testerNumber} for ${params.engineName} — here's your kit`,
+    subject: `You're Founding Tester #${params.testerNumber} for ${params.engineName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #1e2d3d; color: #e2e8f0; padding: 32px; border-radius: 12px;">
         <div style="background: #EF9F27; color: #1e2d3d; display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 16px;">FOUNDING TESTER #${params.testerNumber}</div>

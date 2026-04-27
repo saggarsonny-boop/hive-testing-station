@@ -21,7 +21,7 @@ function downloadChecklist(engine: { name: string; slug: string; checklist: stri
     ...engine.checklist.map((item, i) => `  [ ]  ${i + 1}. ${item}`),
     '',
     sep,
-    'Feedback deadline: 7 days from receiving your tester kit.',
+    'Feedback deadline: 7 days.',
     'Send feedback to: hive@hive.baby',
     `Email subject: Feedback from ${testerId}`,
     'Online form: test.hive.baby/feedback',
@@ -93,7 +93,7 @@ function ConfirmContent() {
       </h1>
       <p style={{ fontSize: 16, color: '#94a3b8', marginBottom: 32, lineHeight: 1.6 }}>
         Welcome to the founding tester programme for <strong style={{ color: '#EF9F27' }}>{tester.engine_name}</strong>.
-        Your tester kit has been sent to your email.
+        Your access details have been sent to your email.
       </p>
 
       {/* Tester ID card */}

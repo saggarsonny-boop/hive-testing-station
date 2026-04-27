@@ -83,7 +83,7 @@ export default function EngineTestPage({ params }: { params: Promise<{ engine: s
           <h1 style={{ fontSize: 28, fontWeight: 800, color: '#f1f5f9', marginBottom: 12 }}>Check your email</h1>
           <p style={{ color: '#94a3b8', lineHeight: 1.6, marginBottom: 24 }}>
             We&apos;ve sent a verification link to <strong style={{ color: '#e2e8f0' }}>{form.email}</strong>.
-            Click it to confirm your application and get your tester kit.
+            Click it to confirm your spot and get access.
           </p>
           <a href="/" style={{ color: '#EF9F27', fontSize: 14, textDecoration: 'none' }}>← View all engines</a>
         </div>
@@ -257,7 +257,7 @@ export default function EngineTestPage({ params }: { params: Promise<{ engine: s
                 onChange={e => setAgreed(e.target.checked)}
                 style={{ marginTop: 2, flexShrink: 0 }}
               />
-              I agree to provide honest, specific feedback within 7 days of receiving my tester kit.
+              I agree to provide honest, specific feedback within 7 days.
             </label>
 
             {error && (
