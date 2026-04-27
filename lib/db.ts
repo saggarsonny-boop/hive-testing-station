@@ -75,4 +75,7 @@ export async function initDb() {
   await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS credit_granted_usd INT NOT NULL DEFAULT 0`
   await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS engines_tested JSONB NOT NULL DEFAULT '[]'`
   await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS notes TEXT`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS items_tested INT NOT NULL DEFAULT 0`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS issues_found INT NOT NULL DEFAULT 0`
+  await sql`ALTER TABLE tester_feedback ADD COLUMN IF NOT EXISTS checklist_responses JSONB`
 }

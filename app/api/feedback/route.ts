@@ -11,7 +11,7 @@ const MAX_CREDIT = 1000
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { testerId, engineSlug, overallRating, whatWorked, whatBroke, uiIssues, wouldUseRegularly, anythingElse } = body
+    const { testerId, engineSlug, overallRating, whatWorked, whatBroke, uiIssues, wouldUseRegularly, anythingElse, checklistResponses } = body
 
     if (!testerId || !engineSlug || !overallRating) {
       return NextResponse.json({ error: 'Tester ID, engine, and rating are required' }, { status: 400 })
@@ -44,14 +44,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Feedback already submitted for this tester ID' }, { status: 409 })
     }
 
+    const checklistJson = checklistResponses ? JSON.stringify(checklistResponses) : null
+    const itemsTested = Array.isArray(checklistResponses) ? checklistResponses.length : 0
+    const issuesFound = Array.isArray(checklistResponses)
+      ? checklistResponses.filter((r: { result: string }) => r.result === 'fail' || r.result === 'partial').length
+      : 0
+
     await sql`
       INSERT INTO tester_feedback (
         tester_id, engine_slug, overall_rating,
-        what_worked, what_broke, ui_issues, would_use_regularly, anything_else
+        what_worked, what_broke, ui_issues, would_use_regularly, anything_else,
+        checklist_responses
       ) VALUES (
         ${testerId.toUpperCase()}, ${engineSlug}, ${overallRating},
         ${whatWorked || null}, ${whatBroke || null}, ${uiIssues || null},
-        ${wouldUseRegularly ?? null}, ${anythingElse || null}
+        ${wouldUseRegularly ?? null}, ${anythingElse || null},
+        ${checklistJson}
       )
     `
 
@@ -89,7 +97,9 @@ export async function POST(req: NextRequest) {
         credit_granted_usd = credit_granted_usd + ${creditGranted},
         credit_granted = ${creditGranted > 0 || tester.credit_earned_usd > 0},
         stripe_customer_id = ${stripeCustomerId ?? null},
-        engines_tested = ${JSON.stringify(updatedEngines)}
+        engines_tested = ${JSON.stringify(updatedEngines)},
+        items_tested = items_tested + ${itemsTested},
+        issues_found = issues_found + ${issuesFound}
       WHERE tester_id = ${testerId.toUpperCase()}
     `
 
