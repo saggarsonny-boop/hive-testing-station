@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   title: 'HiveTestingStation — Help build the Hive. Get $100 in credit.',
@@ -27,6 +29,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen antialiased">
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
