@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, pending: true, message: 'Check your email to confirm your application.' })
   } catch (e) {
-    console.error('[apply]', e)
+    console.error('[apply]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.json({ error: 'Signup failed — please try again' }, { status: 500 })
   }
 }

@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(`${baseUrl}/confirm?id=${tester.tester_id}`)
   } catch (e) {
-    console.error('[verify]', e)
+    console.error('[verify]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.redirect(`${baseUrl}/?error=server-error`)
   }
 }

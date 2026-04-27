@@ -104,7 +104,7 @@ export async function GET(req: NextRequest) {
       ...(myRank !== undefined ? { myRank } : {}),
     })
   } catch (e) {
-    console.error('[leaderboard]', e)
+    console.error('[leaderboard]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.json({ error: 'Failed to load leaderboard' }, { status: 500 })
   }
 }

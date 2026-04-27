@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     const result = await runMigration()
     return NextResponse.json(result)
   } catch (e) {
+    console.error('[migrate]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.json({ error: (e as Error).message }, { status: 500 })
   }
 }
@@ -56,6 +57,7 @@ export async function GET(req: NextRequest) {
     const result = await runMigration()
     return NextResponse.json(result)
   } catch (e) {
+    console.error('[migrate]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.json({ error: (e as Error).message }, { status: 500 })
   }
 }

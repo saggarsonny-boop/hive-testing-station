@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
     if (!rows.length) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json({ tester: rows[0] })
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 })
+    console.error('[tester]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

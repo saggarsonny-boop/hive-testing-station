@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
       totalCredit: newTotal,
     })
   } catch (e) {
-    console.error('[feedback]', e)
+    console.error('[feedback]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.json({ error: 'Feedback submission failed' }, { status: 500 })
   }
 }
