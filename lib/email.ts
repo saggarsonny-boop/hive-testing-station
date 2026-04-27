@@ -32,6 +32,42 @@ export async function sendVerificationEmail(params: {
   })
 }
 
+export async function sendCreditEmail(params: {
+  to: string
+  name: string
+  testerId: string
+  engineName: string
+  creditAmount: number
+  totalCredit: number
+}) {
+  const resend = getResend()
+  if (!resend) { console.warn('[email] RESEND_API_KEY not set — skipping credit email'); return }
+  await resend.emails.send({
+    from: 'Hive Testing Station <hive@hive.baby>',
+    to: params.to,
+    subject: `$${params.creditAmount} credit added to your account — ${params.engineName}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #1e2d3d; color: #e2e8f0; padding: 32px; border-radius: 12px;">
+        <div style="background: #EF9F27; color: #1e2d3d; display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 16px;">CREDIT CONFIRMED</div>
+        <h1 style="color: #e2e8f0; margin-bottom: 4px;">$${params.creditAmount} added, ${params.name.split(' ')[0]}.</h1>
+        <p style="color: #94a3b8; margin-bottom: 24px;">Your feedback for <strong style="color: #EF9F27;">${params.engineName}</strong> has been confirmed and $${params.creditAmount} has been added to your account.</p>
+        <div style="background: #0f1e2d; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: #64748b; font-size: 14px;">This engine</span>
+            <span style="color: #EF9F27; font-weight: bold;">$${params.creditAmount}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #64748b; font-size: 14px;">Total earned so far</span>
+            <span style="color: #EF9F27; font-weight: bold;">$${params.totalCredit} / $1,000 max</span>
+          </div>
+        </div>
+        <p style="color: #94a3b8; font-size: 14px;">Your credit is waiting in your account. It applies automatically when you subscribe to any paid plan. Tester ID: <strong style="color: #EF9F27; font-family: monospace;">${params.testerId}</strong></p>
+        <p style="color: #64748b; font-size: 14px; border-top: 1px solid #2d3f50; margin-top: 32px; padding-top: 24px;">No ads. No investors. No agenda. — Hive</p>
+      </div>
+    `,
+  })
+}
+
 export async function sendTesterKitEmail(params: {
   to: string
   name: string

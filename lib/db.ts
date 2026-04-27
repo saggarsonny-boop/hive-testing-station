@@ -39,6 +39,11 @@ export async function initDb() {
       feedback_submitted BOOLEAN NOT NULL DEFAULT FALSE,
       feedback_at TIMESTAMPTZ,
       credit_granted BOOLEAN NOT NULL DEFAULT FALSE,
+      stripe_customer_id TEXT,
+      credit_earned_usd INT NOT NULL DEFAULT 0,
+      credit_granted_usd INT NOT NULL DEFAULT 0,
+      engines_tested JSONB NOT NULL DEFAULT '[]',
+      notes TEXT,
       CONSTRAINT unique_email_per_engine UNIQUE (email, engine_slug)
     )
   `
@@ -64,4 +69,10 @@ export async function initDb() {
       PRIMARY KEY (ip, engine_slug)
     )
   `
+  // Add new columns to existing tables (safe to run repeatedly)
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS credit_earned_usd INT NOT NULL DEFAULT 0`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS credit_granted_usd INT NOT NULL DEFAULT 0`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS engines_tested JSONB NOT NULL DEFAULT '[]'`
+  await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS notes TEXT`
 }
