@@ -78,4 +78,16 @@ export async function initDb() {
   await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS items_tested INT NOT NULL DEFAULT 0`
   await sql`ALTER TABLE hive_testers ADD COLUMN IF NOT EXISTS issues_found INT NOT NULL DEFAULT 0`
   await sql`ALTER TABLE tester_feedback ADD COLUMN IF NOT EXISTS checklist_responses JSONB`
+  await sql`
+    CREATE TABLE IF NOT EXISTS noi_daily (
+      date DATE PRIMARY KEY,
+      mrr_cents INT NOT NULL DEFAULT 0,
+      active_subscriptions INT NOT NULL DEFAULT 0,
+      new_today INT NOT NULL DEFAULT 0,
+      cancelled_today INT NOT NULL DEFAULT 0,
+      revenue_by_product JSONB NOT NULL DEFAULT '{}',
+      raw_data JSONB NOT NULL DEFAULT '{}',
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `
 }
