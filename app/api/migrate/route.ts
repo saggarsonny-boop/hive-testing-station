@@ -4,36 +4,57 @@ import { ENGINES } from '@/lib/engines'
 
 export const runtime = 'nodejs'
 
-export async function POST(req: NextRequest) {
+async function runMigration() {
+  await initDb()
+  const sql = getDb()
+
+  for (const engine of ENGINES) {
+    await sql`
+      INSERT INTO engine_slots (engine_slug, engine_name, description, max_testers, current_testers, active, checklist)
+      VALUES (
+        ${engine.slug},
+        ${engine.name},
+        ${engine.description},
+        100,
+        0,
+        TRUE,
+        ${JSON.stringify(engine.checklist)}
+      )
+      ON CONFLICT (engine_slug) DO UPDATE SET
+        engine_name = EXCLUDED.engine_name,
+        description = EXCLUDED.description,
+        checklist = EXCLUDED.checklist
+    `
+  }
+
+  return { ok: true, message: `Migrated and seeded ${ENGINES.length} engines` }
+}
+
+function checkAuth(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET
-  // If CRON_SECRET is set, require it. If unset (initial setup), allow the request.
-  if (cronSecret && req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) return true
+  return req.headers.get('authorization') === `Bearer ${cronSecret}`
+}
+
+export async function POST(req: NextRequest) {
+  if (!checkAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
-    await initDb()
-    const sql = getDb()
+    const result = await runMigration()
+    return NextResponse.json(result)
+  } catch (e) {
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 })
+  }
+}
 
-    for (const engine of ENGINES) {
-      await sql`
-        INSERT INTO engine_slots (engine_slug, engine_name, description, max_testers, current_testers, active, checklist)
-        VALUES (
-          ${engine.slug},
-          ${engine.name},
-          ${engine.description},
-          100,
-          0,
-          TRUE,
-          ${JSON.stringify(engine.checklist)}
-        )
-        ON CONFLICT (engine_slug) DO UPDATE SET
-          engine_name = EXCLUDED.engine_name,
-          description = EXCLUDED.description,
-          checklist = EXCLUDED.checklist
-      `
-    }
-
-    return NextResponse.json({ ok: true, message: `Migrated and seeded ${ENGINES.length} engines` })
+export async function GET(req: NextRequest) {
+  if (!checkAuth(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  try {
+    const result = await runMigration()
+    return NextResponse.json(result)
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 })
   }
