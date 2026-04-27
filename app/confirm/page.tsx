@@ -10,6 +10,31 @@ interface Tester {
   engine_name: string
 }
 
+function downloadChecklist(engine: { name: string; slug: string; checklist: string[] }, testerId: string) {
+  const header = `${engine.name.toUpperCase()} — TESTING CHECKLIST`
+  const sep = '─'.repeat(Math.min(header.length, 60))
+  const lines = [
+    header,
+    sep,
+    `Tester ID: ${testerId}`,
+    '',
+    ...engine.checklist.map((item, i) => `  [ ]  ${i + 1}. ${item}`),
+    '',
+    sep,
+    'Feedback deadline: 7 days from receiving your tester kit.',
+    'Send feedback to: hive@hive.baby',
+    `Email subject: Feedback from ${testerId}`,
+    'Online form: test.hive.baby/feedback',
+  ]
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${engine.slug}-checklist-${testerId}.txt`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 function ConfirmContent() {
   const params = useSearchParams()
   const id = params.get('id')
@@ -109,7 +134,25 @@ function ConfirmContent() {
       {/* Checklist */}
       {engine && (
         <div style={{ background: '#1e2d3d', border: '1px solid #2d4a63', borderRadius: 12, padding: 24, textAlign: 'left', marginBottom: 32 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 700, color: '#f1f5f9', marginBottom: 16 }}>Your testing checklist</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#f1f5f9', margin: 0 }}>Your testing checklist</h2>
+            <button
+              onClick={() => downloadChecklist(engine, tester.tester_id)}
+              style={{
+                background: 'transparent',
+                border: '1px solid #2d4a63',
+                color: '#64748b',
+                fontSize: 12,
+                padding: '6px 12px',
+                borderRadius: 6,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                flexShrink: 0,
+              }}
+            >
+              ↓ Download (.txt)
+            </button>
+          </div>
           <ol style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
             {engine.checklist.map((item, i) => (
               <li key={i} style={{ display: 'flex', gap: 10, fontSize: 13, color: '#cbd5e1', lineHeight: 1.5 }}>
