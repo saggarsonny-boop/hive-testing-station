@@ -5,7 +5,9 @@ import { ENGINES } from '@/lib/engines'
 export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
-  if (req.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET
+  // If CRON_SECRET is set, require it. If unset (initial setup), allow the request.
+  if (cronSecret && req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
