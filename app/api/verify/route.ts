@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     const tester = rows[0]
 
     if (tester.email_verified) {
-      return NextResponse.redirect(`${baseUrl}/confirm?id=${tester.tester_id}`)
+      return NextResponse.redirect(`${baseUrl}/confirm/${tester.tester_id}`)
     }
 
     if (new Date() > new Date(tester.verify_token_expires_at)) {
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    return NextResponse.redirect(`${baseUrl}/confirm?id=${tester.tester_id}`)
+    return NextResponse.redirect(`${baseUrl}/confirm/${tester.tester_id}`)
   } catch (e) {
     console.error('[verify]', { error: (e as Error).message, stack: (e as Error).stack, timestamp: new Date().toISOString(), path: req.url })
     return NextResponse.redirect(`${baseUrl}/?error=server-error`)

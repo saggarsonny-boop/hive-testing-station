@@ -19,6 +19,9 @@ body {
   pointer-events: none;
 }
 
+.feedback-input::placeholder { color: #4b6278; }
+.feedback-input:focus { border-color: #EF9F27 !important; outline: none; }
+
 .badge-gold {
   display: inline-block;
   background: #EF9F27;
