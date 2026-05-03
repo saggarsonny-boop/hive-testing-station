@@ -543,6 +543,25 @@ export const ENGINES: Engine[] = [
       'Check that the AI does not give specific legal or tax advice without disclaimer',
     ],
   },
+  {
+    slug: 'imgtrainer',
+    code: 'IMGT',
+    name: 'IMGTrainer',
+    description: 'Clinical reasoning trainer for international medical graduates preparing for USMLE Step 2 CK. Chat with a simulated patient, order workup, get structured feedback.',
+    url: 'https://imgtrainer.hive.baby',
+    checklist: [
+      'Sign up with a fresh email — welcome email arrives within 10 seconds',
+      'Click "Start your first case free" — lands on the case page (chest pain, 58M)',
+      'Ask the patient 3-4 questions — replies stream in token-by-token in character',
+      'Order an ECG and a troponin — results appear inline with timestamps',
+      'Try ordering a D-dimer or CT-PA — deliberation prompt appears with Cancel / Order anyway',
+      'Submit a differential and plan — full-screen overlay shows cycling status messages',
+      'Grading screen renders with overall score, five rubric cards, and a Step 2 practice question',
+      'Results email arrives at the signup address with score and takeaway',
+      'After 2 free cases, navigating to /case/chest-pain-58m redirects to /account?paywall=true',
+      'Subscribe with Stripe test card 4242 4242 4242 4242 — receipt email arrives, plan flips to paid',
+    ],
+  },
 ]
 
 export function getEngineBySlug(slug: string): Engine | undefined {
