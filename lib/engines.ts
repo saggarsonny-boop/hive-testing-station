@@ -562,6 +562,25 @@ export const ENGINES: Engine[] = [
       'Subscribe with Stripe test card 4242 4242 4242 4242 — receipt email arrives, plan flips to paid',
     ],
   },
+  {
+    slug: 'parkback',
+    code: 'PKBK',
+    name: 'ParkBack',
+    description: 'Never lose your car again. One tap when you park, one tap to find your way back. No app, no signup, works offline.',
+    url: 'https://parkback.hive.baby',
+    checklist: [
+      'Open the page on a phone — does the Drop pin button appear clearly?',
+      'Tap Drop pin — does it request location permission and capture your spot?',
+      'Take an optional photo of the bay number — does it save and display correctly?',
+      'Record a voice memo (under 30 seconds) — does playback work?',
+      'Walk 20+ feet away — does distance update and arrow rotate?',
+      'On iOS, check the figure-8 calibration hint appears briefly on load',
+      'Tap Navigate — does it deep-link to Maps with the correct destination?',
+      'Tap Share spot — does the link copy or open the native share sheet?',
+      'Open the shared link on a second device — does it show distance and arrow?',
+      'Refresh the page — does the saved pin persist via localStorage?',
+    ],
+  },
 ]
 
 export function getEngineBySlug(slug: string): Engine | undefined {
